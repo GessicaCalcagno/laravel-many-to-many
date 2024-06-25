@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\Type;
 use Illuminate\Http\Request;
@@ -34,12 +35,13 @@ class ProjectController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * passa come parametro lo store-request
      */
-    public function store(StoreProjectRequest $request )
+    public function store(StoreProjectRequest $request)
     {
         //dd($request->all());
         $data = $request->validated();
-        
+
         $project = new Project();
         $project->fill($data);
         //Inserisci use perchè non lo fa automaticamente
@@ -69,13 +71,16 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
         //
-        $data = $request->all();
-        $project->slug = Str::slug($request->title);
+        $data = $request->validated();
+        // $project->slug = Str::slug($request->title);
+        //data è un array associativo ed aggiungiamo lo slug nella parentesi quadra
+        //se lo scrivo cosi devo aggiungere slug nel fillable
+        $data['slug'] = Str::slug($data['title']);
         $project->update($data);
-        return redirect()->route('admin.projects.show', ['project'=> $project->slug]);
+        return redirect()->route('admin.projects.show', ['project' => $project->slug])->with('message', 'Il progetto ' . $project->title . ' è stato modificato con successo!');
     }
 
     /**
@@ -84,6 +89,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-        return redirect()->route('admin.projects.index')->with('message','project '. $project->title . ' è stato cancellato con successo!');
+        return redirect()->route('admin.projects.index')->with('message', 'Il progetto ' . $project->title . ' è stato cancellato con successo!');
     }
 }
