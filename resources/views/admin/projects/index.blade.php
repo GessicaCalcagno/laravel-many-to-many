@@ -19,6 +19,7 @@
                     <th>ID</th>
                     <th>Type</th>
                     <th>Titolo</th>
+                    <th>Tecnologie</th>
                     <th>Descrizione</th>
                     <th>Slug</th>
                     <th>Azioni</th>
@@ -31,6 +32,18 @@
                         {{-- aggiungo il type e se non c'è '?'' --}}
                         <td>{{ $project->type?->name }}</td>
                         <td>{{ $project->title }}</td>
+                        <td>
+                            <ul>
+                                @forelse ($project->technologies as $technology)
+                                    <li>
+                                        {{ $technology->name }}
+                                    </li>
+                                @empty
+                                    <li> Nessuna tecnologia presente</li>
+                                @endforelse
+                            </ul>
+
+                        </td>
                         <td>{{ $project->description }}</td>
                         <td> <a class="btn btn-outline-warning btn-sm btn-details "
                                 href="{{ route('admin.projects.show', ['project' => $project->slug]) }}">Dettagli</a></td>
