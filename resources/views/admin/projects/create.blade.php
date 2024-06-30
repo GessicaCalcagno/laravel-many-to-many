@@ -10,7 +10,7 @@
                 <input type="text" name="title" class="form-control" id="title" required>
             </div>
             {{-- TYPE --}}
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="type_id">Type</label>
                 <select id="type_id" name="type_id" class="form-control" required>
                     <option value="">Select a type</option>
@@ -19,6 +19,23 @@
                     @endforeach
                 </select>
             </div>
+
+            {{-- TECHNOLOGIES --}}
+            <div class="form-group mb-3">
+                <span>Tecnologie</span>
+                <ul class="list-group">
+                    @foreach ($technologies as $technology)
+                        <li class="list-group-item">
+                            {{-- APPLICO L'ARRAY VUOTO COME SECONDO PARAMETRO --}}
+                            <input @checked(in_array($technology->id, old('technologies', []))) name="technologies[]" class="form-check-input me-1"
+                                type="checkbox" value="{{ $technology->id }}" id="technology-{{ $technology->id }}" autocomplete="off">
+                            <label class="form-check-label"
+                                for="technology-{{ $technology->id }}">{{ $technology->name }}</label>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            {{-- __________________________- --}}
 
             <div class="form-group">
                 <label for="description">Descrizione</label>

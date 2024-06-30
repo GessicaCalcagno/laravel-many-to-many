@@ -23,7 +23,9 @@ class StoreProjectRequest extends FormRequest
     {
         return [
         'title' => ['required', 'max:255', 'min:2', 'unique:projects'],
-        'description' => ['nullable', 'min:5', 'max:6000']
+        'description' => ['nullable', 'min:5', 'max:6000'],
+        // technologies è opzionale (può essere nullo), ma se viene fornito, ogni elemento dell'array deve esistere nella colonna id della tabella technologies del database
+        'technologies' => ['nullable', 'exists:technologies,id']
         ];
     }
 }
